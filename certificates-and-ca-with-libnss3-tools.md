@@ -1,6 +1,6 @@
+#Minimalitstic Certificates And CAs HowTo Using libnss3-utils (certutil)
 
-#Create a CA
-
+## Create a CA
 Create the certificate database for the CA:
 
     mkdir CA_db
@@ -14,7 +14,7 @@ Now extract the certificate. It will be needed to create a certificate signing r
 
     certutil -L -d CA_db -n "CA Name" -a -o caname.crt
 
-# Create Certificate Signing Request (CSR)
+## Create Certificate Signing Request (CSR)
 First create a certificate database for your application(s):
 
     mkdir cert_db
@@ -28,12 +28,12 @@ Create the CSR:
 
     certutil -R -d cert_db -s "CN=Usage,O=Company,OU=Department,L=City,ST=State,C=US" -a -o server.req
 
-# Signing
+## Signing CSRs
 Sign a CSR to create a valid certificate issued by this CA:
 
     certutil -C -d CA_db -c "CA Name" -a -i server.req -o server.crt -2 -6
 
-# Import Signed Certificate
+## Import Signed Certificate
 Import signed certificate into your certificate database:
 
     certutil -A -d cert_db -n "Usage" -a -i server.crt -t ",,"
