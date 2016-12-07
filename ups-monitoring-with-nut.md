@@ -1,4 +1,4 @@
-#Minimalistic UPS Monitoring Wit Nut HowTo
+#Minimalistic UPS Monitoring With Nut HowTo
 
 Install nut on all machines that need information on the UPS state and the one the UPS is connected to (in case auf a USB or serial connection).
 
@@ -26,9 +26,9 @@ Then edit /etc/nut/ups.conf and add something like this:
         port = auto
         description = "My UPS / Location"
 
-### Configure NUT network deamon (upsd)
+### Configure NUT Network Deamon (upsd)
 
-In the first step /etc/nut/upsd.conf does not need any changes. But we need a user to gather information from the UPS. Edit /etc/nut/upsd.users and add a users for local and remote monitoring:
+In the first step /etc/nut/upsd.conf does not need any changes. But we need a user to connect to upsd and gather information about the UPS. Edit /etc/nut/upsd.users and add a users for local and remote monitoring:
 
     [locupsmon]
         password = topsecret
@@ -60,15 +60,15 @@ Check syslog. You should find an entry like:
 
     upsd[12061]: User locupsmon@127.0.0.1 logged into UPS [myups]
 
-### Switch from localhost to network reachable
+### Switch From Localhost to Network Reachable
 
-Add a LISTEN line to /etc/nut/upsd,conf
+Add a LISTEN line to /etc/nut/upsd,conf (replace with your ip address; add more lines as needed):
 
     LISTEN 10.100.2.32 3493
 
 and change the MONTIOR directive in /etc/nut/upsmon.conf accordingly
 
-    MONITOR myups@10.100.2.23 1 locupsmon topsecret master
+    MONITOR myups@10.100.2.32 1 locupsmon topsecret master
 
 then restart client and server
 
@@ -77,11 +77,11 @@ then restart client and server
 
 ### Setup SSL
 
-Create yourself a certificate in a NSS certificate database. In the following you will need the certificate nick (-n Argument in certutil commands) and the location of the certificate database plus the passphrase to the certificate database. [Check this HowTo](https://github.com/tweithoener/minimalistic-howtos/blob/master/certificates-and-ca-with-libnss3-tools.md).
+Create yourself a certificate in a NSS certificate database. In the following you will need the certificate nick (-n Argument in certutil commands) and the location of the certificate database plus the passphrase. [Check this HowTo](https://github.com/tweithoener/minimalistic-howtos/blob/master/certificates-and-ca-with-libnss3-tools.md).
 
-Certificate CN and certificate nick in db should be hosts domwin name or ip address (10.100.2.32 in this example).
+Certificate CN and certificate nick in db should be host's ip address (10.100.2.32 in this example).
 
-Get owner and permissions straigt:
+Get owner and permissions straight:
 
     cd /etc/nut
 	chown -R root:nut cert_db
@@ -100,7 +100,7 @@ In /etc/nut/upsmon.conf add the following lines
 	CERTVERIFY 1
 	FORCESSL 1
 
-The restart nut server and client
+Then restart nut server and client
 
     service nut-server restart
     service nut-client restart
@@ -122,7 +122,12 @@ Adjust owner and permission if needed
     chwon root:nut upsmon.conf
 	chmod 640 upsmon.conf
 
-Change the MONITOR directive to use the remote user
+Remove config files that are not needed
+
+    cd /etc/nut
+	rm ups.conf upsd.conf upsd.users
+
+Change the MONITOR in /etc/nut/upsmon.conf directive to use the remote user
 
     MONITOR myups@10.100.2.32 1 remupsmon topsecret slave
 
@@ -132,4 +137,6 @@ Start the monitoring service
 
 ## Actions and Notifications
 
-Config is in /etc/nut/upsmon.conf. Watch out for NOTIFYCMD, SHUTDOWNCMD, NOTIFYMSF and NOTIFYFLAG. 
+Config is in /etc/nut/upsmon.conf. Watch out for NOTIFYCMD, SHUTDOWNCMD, NOTIFYMSG and NOTIFYFLAG. 
+
+Make sure /etc/init.d/nut-server and /etc/init.d/nut-client are run during boot (and shutdown).
