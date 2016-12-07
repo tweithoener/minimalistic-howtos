@@ -26,7 +26,7 @@ Then edit /etc/nut/ups.conf and add something like this:
         port = auto
         description = "My UPS / Location"
 
-### Configure NUT Network Deamon (upsd)
+### Configure NUT Network Daemon (upsd)
 
 In the first step /etc/nut/upsd.conf does not need any changes. But we need a user to connect to upsd and gather information about the UPS. Edit /etc/nut/upsd.users and add a users for local and remote monitoring:
 
@@ -72,14 +72,12 @@ and change the MONTIOR directive in /etc/nut/upsmon.conf accordingly
 
 then restart client and server
 
-   service nut-server restart
-   service nut-client restart
+    service nut-server restart
+    service nut-client restart
 
 ### Setup SSL
 
-Create yourself a certificate in a NSS certificate database. In the following you will need the certificate nick (-n Argument in certutil commands) and the location of the certificate database plus the passphrase. [Check this HowTo](https://github.com/tweithoener/minimalistic-howtos/blob/master/certificates-and-ca-with-libnss3-tools.md).
-
-Certificate CN and certificate nick in db should be host's ip address (10.100.2.32 in this example).
+Create a certificate in a NSS certificate database. Remeber the location of the certificate database (here /etc/nut/cert_db) and the passphrase (topsecret). Certificate CN and certificate nick in db should be host's ip address (10.100.2.32 in this example). [Check this HowTo](https://github.com/tweithoener/minimalistic-howtos/blob/master/certificates-and-ca-with-libnss3-tools.md)
 
 Get owner and permissions straight:
 
