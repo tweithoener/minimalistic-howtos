@@ -1,4 +1,4 @@
-#Minimalitstic Certificates And CAs HowTo Using libnss3-utils (certutil)
+#Minimalitstic Certificates And CAs HowTo Using libnss3-tools (certutil)
 
 ## Create a CA
 Create the certificate database for the CA:
